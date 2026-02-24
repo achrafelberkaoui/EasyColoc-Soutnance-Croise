@@ -43,7 +43,7 @@ class AuthController extends Controller
                 Auth::logout();
                 return back()->with('error', 'desole vous etes bloque');
             }
-        return redirect()->intended('/dashbord');
+        return redirect()->intended('/dashboard');
         }
         return back()->with('error', 'Email ou mot de passe incorrect');
     }
