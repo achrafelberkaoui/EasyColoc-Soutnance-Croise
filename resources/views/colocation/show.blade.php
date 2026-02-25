@@ -25,6 +25,31 @@
             </li>
             @endforeach
         </ul>
+        <div class="bg-white p-6 rounded shadow mt-6">
+        
+            <h3 class="font-bold text-lg mb-4">Inviter un membre</h3>
+        
+            @if(session('success'))
+                <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
+                    {{ session('success') }}
+                </div>
+            @endif
+        
+            <form action="{{ route('invitation.send',$colocation) }}" method="POST">
+                @csrf
+        
+                <input type="email"
+                       name="email"
+                       placeholder="Email du membre"
+                       required
+                       class="w-full border p-3 rounded mb-3">
+        
+                <button class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700">
+                    Envoyer invitation
+                </button>
+            </form>
+        
+        </div>
     </div>
 
     <!-- SOLDE -->

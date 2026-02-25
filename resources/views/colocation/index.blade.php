@@ -18,7 +18,7 @@
         <p>Membres: {{ $coloc->members->count() }}</p>
         <div class="mt-4 flex gap-2">
             <a href="{{ route('colocation.show', $coloc->id) }}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Voir</a>
-@if($coloc->owner_id == auth()->id() || $coloc->members->contains(auth()->id()))
+@if(($coloc->owner_id == auth()->id() || $coloc->members->contains(auth()->id())) && $coloc->status === 'active'  )
     <form action="{{ route('colocation.cancel', $coloc) }}" method="POST" class="inline">
         @csrf
         <button class="bg-red-500 text-white px-3 py-1 rounded">

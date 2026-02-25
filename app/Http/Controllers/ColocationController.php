@@ -100,9 +100,8 @@ public function cancel(Colocation $colocation)
             $membership->pivot->update(['left_at'=>now()]);
         }
     }
-
     return redirect()->route('colocation.index')
-        ->with('success', 'Colocation mise à jour avec succès.');
+    ->with('success', 'Colocation mise a jour avec succes.');
 }
     
 }

@@ -9,3 +9,4 @@ Route::get('/dashboard', function () {
 require __DIR__ . '/auth/register.php';
 require __DIR__ . '/auth/login.php';
 require __DIR__ . '/dashboard.php';
+require __DIR__ . '/invitation/invitation.php';
