@@ -9,6 +9,7 @@
 <body class="bg-gray-100 flex min-h-screen">
 
     <!-- Sidebar -->
+     @auth
     <aside class="w-64 bg-white shadow-md p-6 flex flex-col">
         <h1 class="text-2xl font-bold mb-8">EasyColoc</h1>
         <nav class="flex flex-col gap-3">
@@ -22,7 +23,16 @@
             </form>
         </nav>
     </aside>
-
+    @endauth
+     @guest
+    <aside class="w-64 bg-white shadow-md p-6 flex flex-col">
+        <nav class="flex flex-col gap-3">
+                    <h1 class="text-2xl font-bold mb-8">EasyColoc</h1>
+        <a href="{{ route('login') }}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Login</a>
+        <a href="{{ route('register') }}" class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Register</a>
+        </nav>
+    </aside>
+    @endguest
     <!-- Main Content -->
     <main class="flex-1 p-6">
         @yield('content')

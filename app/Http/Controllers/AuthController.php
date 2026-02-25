@@ -40,8 +40,8 @@ class AuthController extends Controller
         if(Auth::attempt($credentials)){
             $user = Auth::user();
             if($user->is_banned){
-                Auth::logout();
-                return back()->with('error', 'desole vous etes bloque');
+            Auth::logout();
+            return back()->with('error', 'desole vous etes bloque');
             }
         return redirect()->intended('/dashboard');
         }

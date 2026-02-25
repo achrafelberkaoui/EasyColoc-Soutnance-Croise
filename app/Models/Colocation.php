@@ -29,6 +29,6 @@ public function members()
 
 public function expenses()
 {
-    // return $this->hasMany(Expense::class);
+    return $this->hasMany(Expense::class);
 }
 }
