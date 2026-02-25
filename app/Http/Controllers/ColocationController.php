@@ -66,7 +66,8 @@ class ColocationController extends Controller
     {
         $colocation->load('members', 'owner', 'expenses');
         $balances = [];
-        return view('colocation.show', compact('balances', 'colocation'));
+        $user = Auth::user();
+        return view('colocation.show', compact('balances', 'colocation', 'user'));
     }
 
     /**
