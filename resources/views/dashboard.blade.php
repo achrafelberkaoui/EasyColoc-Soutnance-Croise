@@ -2,6 +2,16 @@
 
 @section('content')
 <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+@if(session('error'))
+<div class="bg-red-500 text-white p-2 rounded mb-4">
+    {{ session('error') }}
+</div>
+@endif
+@if(session('error'))
+<div class="bg-red-500 text-white p-2 rounded mb-4">
+    {{ session('error') }}
+</div>
+@endif
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
@@ -16,8 +26,8 @@
     </div>
 
     <div class="bg-white p-6 rounded shadow">
-        <h3 class="font-semibold text-gray-500">Balance totale</h3>
-        <p class="text-3xl font-bold mt-2">{{ $totalBalance ?? 0 }} €</p>
+        <h3 class="font-semibold text-gray-500">Reputation</h3>
+        <p class="text-3xl font-bold mt-2">{{ $reputation ?? 0 }}</p>
     </div>
 
 </div>

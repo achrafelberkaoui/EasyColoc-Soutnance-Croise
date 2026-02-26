@@ -13,10 +13,12 @@ class ColocationController extends Controller
         $user = Auth::user();
 
         $colocations = $user->colocations;
-        $totalExpenses = 0;
-        $totalBalance = 0;
+        $totalExpenses = $user->expenses()->sum('amount');
+        $reputation = $user->repetation;
 
-        return view('dashboard', compact('user','colocations','totalExpenses','totalBalance'));
+
+
+        return view('dashboard', compact('user','colocations','totalExpenses','reputation'));
     }
     /**
      * Display a listing of the resource.
@@ -24,7 +26,8 @@ class ColocationController extends Controller
     public function index()
     {
         $colocations = Auth::user()->colocations;
-        return view('colocation.index', compact('colocations'));    }
+        return view('colocation.index', compact('colocations'));    
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -61,14 +64,44 @@ class ColocationController extends Controller
 
     /**
      * Display the specified resource.
-     */
+        */
     public function show(Colocation $colocation)
     {
-        $colocation->load('members', 'owner', 'expenses');
-        $balances = [];
-        $user = Auth::user();
-        return view('colocation.show', compact('balances', 'colocation', 'user'));
-    }
+        $colocation->load('members.expenses', 'expenses', 'owner');
+
+        $members = $colocation->members;
+        $credits = [];
+        $expenseDetails = [];
+        $expenses = $colocation->expenses;
+        $count = $members->count();
+        foreach($expenses as $expense){
+            $share = $count > 0 ? $expense->amount / $count : 0;
+            foreach ($members as $member) {
+            if($member->id == $expense->user_id){
+                continue;
+            }
+                $credits[] = [
+                    'name' => $member->name,
+                    'credit' => round($share, 2)
+                ];
+            }
+            $expenseDetails [] = [
+                
+                'creator_id' => $expense->user_id,
+                'id' => $expense->id,
+                'title' => $expense->title,
+                'amount' => $expense->amount,
+                'paid_by'=> $expense->user->name,
+                'is_paid'=>$expense->is_paid,
+                'credits'=>$credits,
+                'category'=>$expense->category->name,
+                'credit' => round($share, 2)
+            ];
+        }
+        // $membership = $coloc->members->firstWhere('id', auth()->id());
+        
+        return view('colocation.show', compact('colocation','expenseDetails'));
+}
 
     /**
      * Show the form for editing the specified resource.
@@ -94,6 +127,13 @@ public function cancel(Colocation $colocation)
     $user = Auth::user();
 
     if($colocation->owner_id == $user->id) {
+        $hasCredit = $colocation->expenses()
+        ->where('user_id',$user->id)->sum('amount') > 0;
+        if($hasCredit){
+            $user->increment('repetation', 1);
+        }else{
+            $user->decrement('repetation', 1);
+        }
         $colocation->update(['status'=>'cancel']);
     } else {
         $membership = $colocation->members()->where('user_id',$user->id)->first();

@@ -15,7 +15,7 @@
         <nav class="flex flex-col gap-3">
             <a href="{{ route('dashboard') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Dashboard</a>
             <a href="{{ route('colocation.index') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Colocations</a>
-            <a href="#" class="hover:bg-blue-500 hover:text-white p-2 rounded">Catégories</a>
+            <a href="{{ route('categories.index') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Catégories</a>
             <a href="#" class="hover:bg-blue-500 hover:text-white p-2 rounded">Profil</a>
             <form action="{{ route('logout') }}" method="POST" class="mt-6">
                 @csrf

@@ -8,7 +8,7 @@ class Expense extends Model
 {
     protected $fillable = [
         'title', 'amount', 'date', 'colocation_id'
-        ,'user_id', 'category_id'
+        ,'user_id', 'category_id', 'is_paid'
     ];
     public function colocation()
     {

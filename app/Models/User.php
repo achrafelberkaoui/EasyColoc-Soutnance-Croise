@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Colocation;
+use App\Models\Category;
 
 class User extends Authenticatable
 {
@@ -60,5 +61,13 @@ class User extends Authenticatable
     public function categories()
     {
         return $this->hasMany(Category::class);
+    }
+    public function activeColocation()
+    {
+        return $this->colocations()->where('status', 'active');
+    }
+    public function expenses()
+    {
+        return $this->hasMany(Expense::class);
     }
 }
