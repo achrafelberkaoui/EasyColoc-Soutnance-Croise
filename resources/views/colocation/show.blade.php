@@ -7,7 +7,21 @@
 <h2 class="text-2xl font-bold mb-6">{{ $colocation->name }}</h2>
 
 <div class="grid md:grid-cols-3 gap-6">
-
+    
+    <!-- Filter -->
+    <form method="GET" class="mb-4">
+        <select name="month" class="border p-2 rounded">
+        <option value="">Tous les mois</option>
+        @for($i=1;$i<=12;$i++)
+        <option value="{{ $i }}">
+        Mois {{ $i }}
+        </option>
+        @endfor
+        </select>
+    <button class="bg-gray-600 text-white px-3 py-1 rounded">
+    Filtrer
+    </button>
+    </form>
     <!-- INFO -->
     <div class="bg-white p-6 rounded shadow">
         <h3 class="font-bold mb-2">Informations</h3>
@@ -42,6 +56,17 @@
     </div>
 
 </div>
+
+    <!-- categories  -->
+    <div class="bg-white p-6 rounded shadow mt-8">
+    <h3 class="font-bold mb-3">Statistiques par catégorie</h3>
+    @foreach($statsCategories as $stat)
+    <p>
+    {{ $stat->category->name }} :
+    <strong>{{ $stat->total }} DH</strong>
+    </p>
+    @endforeach
+    </div>
 
 <!-- EXPENSES -->
 <div class="bg-white p-6 rounded shadow mt-8">
@@ -92,8 +117,14 @@
                     <button class="bg-blue-500 text-white px-3 py-1 rounded text-sm">Payée</button>
                 </form>
             @endif
-
-            <!-- Supprimer (creator) -->
+            <!-- Modifier -->
+                <a href="{{ route('expenses.edit',$expense['id']) }}"
+                class="bg-blue-500 text-white px-3 py-1 rounded text-sm">
+                
+                Modifier
+                
+                </a>
+            <!-- Supprimer -->
             @if($expense['creator_id'] == auth()->id())
                 <form action="{{ route('expenses.destroy', $expense['id']) }}" method="POST">
                     @csrf

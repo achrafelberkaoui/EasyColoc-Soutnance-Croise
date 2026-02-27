@@ -68,13 +68,18 @@ class ColocationController extends Controller
     public function show(Colocation $colocation)
     {
         $colocation->load('members.expenses', 'expenses', 'owner');
-
+        $month = request('month');
         $members = $colocation->members;
-        $credits = [];
         $expenseDetails = [];
-        $expenses = $colocation->expenses;
-        $count = $members->count();
-        foreach($expenses as $expense){
+        $expenses = $colocation->expenses()->when($month, function($query, $month){
+            $query->whereMonth('date', $month);
+            })->with('category', 'user')->latest()->get();
+            // dd($month);
+            $statsCategories = $colocation->expenses()->selectRaw('category_id, sum(amount) as total')
+            ->groupBy('category_id')->with('category')->get();
+            $count = $members->count();
+            foreach($expenses as $expense){
+            $credits = [];
             $share = $count > 0 ? $expense->amount / $count : 0;
             foreach ($members as $member) {
             if($member->id == $expense->user_id){
@@ -98,9 +103,8 @@ class ColocationController extends Controller
                 'credit' => round($share, 2)
             ];
         }
-        // $membership = $coloc->members->firstWhere('id', auth()->id());
         
-        return view('colocation.show', compact('colocation','expenseDetails'));
+        return view('colocation.show', compact('colocation','expenseDetails','statsCategories'));
 }
 
     /**
@@ -137,8 +141,16 @@ public function cancel(Colocation $colocation)
         $colocation->update(['status'=>'cancel']);
     } else {
         $membership = $colocation->members()->where('user_id',$user->id)->first();
+        $hasCredit = $colocation->expenses()
+        ->where('user_id',$membership->id)->sum('amount') >= 0;
+        if($hasCredit){
+            $membership->increment('reputation', 1);
+        }else{
+            $membership->decrement('reputation', 1);
+        }
         if($membership) {
             $membership->pivot->update(['left_at'=>now()]);
+            $colocation->members()->detach($user->id);
         }
     }
     return redirect()->route('colocation.index')

@@ -22,3 +22,5 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+database/migrations/2026_02_27_214903_create_payments_table.php
+app/Models/payment.php

@@ -65,16 +65,35 @@ class ExpenseController extends Controller
      */
     public function edit(Expense $expense)
     {
-        $categories = $expense->colocation->categories;
+        if ($expense->colocation_id !== auth()->user()->activeColocation->first()->id) {
+        abort(403, 'aucun colocation Active');
+        }
+        $categories = auth()->user()->categories;
+        // dd($categories);
         return view('expenses.edit', compact('expense', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ValidatRequest $request, Expense $expense)
     {
-        //
+    $colocation = auth()->user()->activeColocation()->first();
+
+    if ($expense->colocation_id !== ($colocation->id ?? 0)) {
+        abort(403,'aucun colocation Active');
+    }
+
+    $data = $request->only([
+        'title',
+        'amount',
+        'date',
+        'category_id'
+    ]);
+
+    $expense->update($data);
+
+    return redirect()->route('colocation.show',$colocation)->with('success','Depense modifiee');
     }
 
     /**
@@ -82,6 +101,9 @@ class ExpenseController extends Controller
      */
     public function destroy(Expense $expense, Colocation $colocation)
     {
+    if ($expense->colocation_id !== (auth()->user()->activeColocation()->first()->id ?? 0)) {
+        abort(403, 'aucun colocation Active');
+    }
         $colocation->load('members.expenses', 'expenses', 'owner');
         $expense->delete();
 
@@ -89,8 +111,8 @@ class ExpenseController extends Controller
     }
 public function markPaid(Expense $expense)
 {
-    if ($expense->colocation_id !== auth()->user()->activeColocation->id) {
-        abort(403);
+    if ($expense->colocation_id !== auth()->user()->activeColocation->first()->id) {
+        abort(403, 'aucun colocation Active');
     }
 
     $expense->update([

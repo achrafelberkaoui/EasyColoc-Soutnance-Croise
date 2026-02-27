@@ -41,7 +41,7 @@ class InvitationController extends Controller
             'role' => 'member',
             'joined_at' => now()
         ]);
-        $invitation->update(['status', 'accept']);
+        $invitation->update(['status'=>'accepted']);
         return redirect()->route('colocation.show',$invitation->colocation);    
         }
 
