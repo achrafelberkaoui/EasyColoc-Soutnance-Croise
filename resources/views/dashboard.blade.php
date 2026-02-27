@@ -13,6 +13,17 @@
 </div>
 @endif
 
+@if($isOwner)
+<div class="bg-blue-100 p-4 rounded mt-6">
+    <h3 class="font-bold text-blue-700">Mode Owner</h3>
+    <p>Vous gérez au moins une colocation.</p>
+</div>
+@else
+<div class="bg-gray-100 p-4 rounded mt-6">
+    <h3 class="font-bold text-gray-700">Mode Membre</h3>
+</div>
+@endif
+
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
     <div class="bg-white p-6 rounded shadow">

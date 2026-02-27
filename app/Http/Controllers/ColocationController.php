@@ -14,11 +14,13 @@ class ColocationController extends Controller
 
         $colocations = $user->colocations;
         $totalExpenses = $user->expenses()->sum('amount');
-        $reputation = $user->repetation;
+        $reputation = $user->reputation;
+        $isOwner = $colocations->contains(function($coloc) use ($user){
+            // dd($coloc->owner_id = $user->id && $coloc->status == 'active');
+            return ($coloc->owner_id == $user->id && $coloc->status == 'active');
+        });
 
-
-
-        return view('dashboard', compact('user','colocations','totalExpenses','reputation'));
+        return view('dashboard', compact('user','colocations','totalExpenses','reputation', 'isOwner'));
     }
     /**
      * Display a listing of the resource.
@@ -42,9 +44,7 @@ class ColocationController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name'=> 'required|string|max:200'
-        ]);
+        $data = $request->only(['name']);
         $hasActive = Colocation::whereHas('members', function($st){
             $st->where('user_id', Auth::id());
         })->where('status', 'active')->exists();
@@ -52,7 +52,7 @@ class ColocationController extends Controller
             return redirect()->route('colocation.index')->with('error', 'vous avez deja une colocation active');
         }
         $colocation = Colocation::create([
-            'name'=> $request->name,
+            'name'=> $data['name'],
             'owner_id'=>Auth::id()
         ]);
         $colocation->members()->attach(Auth::id(),[
@@ -128,11 +128,11 @@ public function cancel(Colocation $colocation)
 
     if($colocation->owner_id == $user->id) {
         $hasCredit = $colocation->expenses()
-        ->where('user_id',$user->id)->sum('amount') > 0;
+        ->where('user_id',$user->id)->sum('amount') >= 0;
         if($hasCredit){
-            $user->increment('repetation', 1);
+            $user->increment('reputation', 1);
         }else{
-            $user->decrement('repetation', 1);
+            $user->decrement('reputation', 1);
         }
         $colocation->update(['status'=>'cancel']);
     } else {

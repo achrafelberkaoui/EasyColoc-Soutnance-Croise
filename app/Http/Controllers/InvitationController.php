@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidatRequest;
 use App\Mail\InvitationMail;
 use App\Models\Colocation;
 use App\Models\Invitation;
@@ -12,22 +13,18 @@ use Illuminate\Support\Str;
 
 class InvitationController extends Controller
 {
-    public function send(Request $request, Colocation $colocation)
+    public function send(ValidatRequest $request, Colocation $colocation)
     {
-        $request->validate(
-            [
-                'email'=> 'required|email|max:200'
-            ]
-        );
+        $req = $request->only(['email']);
         $token = Str::random();
 
         $invitation = Invitation::create([
-            'email'=> $request->email,
+            'email'=> $req['email'],
             'token'=> $token,
             'colocation_id' => $colocation->id
         ]);
 
-        Mail::To($request->email)->send(new InvitationMail($invitation));
+        Mail::To($req['email'])->send(new InvitationMail($invitation));
         return back()->with('succes', 'invitaion envoyee');
     }
     public function accept($token)

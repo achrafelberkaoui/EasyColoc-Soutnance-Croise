@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ValidatRequest;
 use App\Models\Colocation;
 use App\Models\Expense;
 use Illuminate\Http\Request;
@@ -36,23 +37,17 @@ class ExpenseController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ValidatRequest $request)
     {
         $colocation = Auth::user()->activeColocation()->first();
-        $request->validate([
-            'title'=>'required|max:100',
-            'amount'=>'required|numeric|min:0',
-            'date'=>'required|date',
-            'category_id'=>'required'
-            
-        ]);
+        $data = $request->only(['title','amount','date','category_id']);
         Expense::create([
-            'title'=>$request->title,
-            'amount'=>$request->amount,
-            'date'=>$request->date,
+            'title'=>$data['title'],
+            'amount'=>$data['amount'],
+            'date'=>$data['date'],
             'colocation_id'=>$colocation->id,
             'user_id'=>auth()->id(),
-            'category_id'=>$request->category_id
+            'category_id'=>$data['category_id']
         ]);
         return redirect()->route('colocation.show',$colocation);
     }
@@ -94,9 +89,9 @@ class ExpenseController extends Controller
     }
 public function markPaid(Expense $expense)
 {
-    // if ($expense->colocation_id !== auth()->user()->activeColocation->id) {
-    //     abort(403);
-    // }
+    if ($expense->colocation_id !== auth()->user()->activeColocation->id) {
+        abort(403);
+    }
 
     $expense->update([
         'is_paid' => true

@@ -25,10 +25,10 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name'=>'required|max:100']);
+        $data = $request->only(['name']);
         // dd('ffff');
         auth()->user()->categories()->create([
-            'name'=>$request->name
+            'name'=>$data['name']
         ]);
         return back()->with('success','Categorie ajoute !');
     }
