@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+
 use Illuminate\Database\Eloquent\Model;
 
 class Colocation extends Model
@@ -30,5 +31,10 @@ public function members()
 public function expenses()
 {
     return $this->hasMany(Expense::class);
+}
+
+public function payments()
+{
+    return $this->hasMany(payment::class);
 }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ValidatRequest;
 use App\Models\Colocation;
 use App\Models\Expense;
+use App\Models\payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -41,7 +42,7 @@ class ExpenseController extends Controller
     {
         $colocation = Auth::user()->activeColocation()->first();
         $data = $request->only(['title','amount','date','category_id']);
-        Expense::create([
+        $expense = Expense::create([
             'title'=>$data['title'],
             'amount'=>$data['amount'],
             'date'=>$data['date'],
@@ -49,6 +50,23 @@ class ExpenseController extends Controller
             'user_id'=>auth()->id(),
             'category_id'=>$data['category_id']
         ]);
+        $members = $colocation->members;
+        $count = $members->count();
+        $credit = $expense->amount / $count;
+
+        foreach($members as $member){
+            if ($member->id == $expense->user_id) {
+                continue;
+            }
+            Payment::create([
+                'expense_id'=>$expense->id,
+                'colocation_id'=> $colocation->id,
+                'from_user_id'=> $member->id,
+                'to_user_id'=> $expense->user_id,
+                'amount'=> $credit,
+                'is_paid'=> false
+            ]);
+        }
         return redirect()->route('colocation.show',$colocation);
     }
 
@@ -118,8 +136,11 @@ public function markPaid(Expense $expense)
     $expense->update([
         'is_paid' => true
     ]);
+    Payment::where('expense_id', $expense->id)->update([
+        'is_paid'=>true
+    ]);
 
 
-    return back()->with('success','Depense marquee payee');
+    return back()->with('success','Paiment enregistre');
 }
 }

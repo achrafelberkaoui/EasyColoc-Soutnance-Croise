@@ -24,4 +24,8 @@ class Expense extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function payments()
+    {
+    return $this->hasMany(payment::class);
+    }
 }

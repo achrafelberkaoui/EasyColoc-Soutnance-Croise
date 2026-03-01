@@ -33,7 +33,7 @@
 
     <div class="bg-white p-6 rounded shadow">
         <h3 class="font-semibold text-gray-500">Dépenses totales</h3>
-        <p class="text-3xl font-bold mt-2">{{ $totalExpenses ?? 0 }} €</p>
+        <p class="text-3xl font-bold mt-2">{{ $totalExpenses ?? 0 }} DH</p>
     </div>
 
     <div class="bg-white p-6 rounded shadow">
