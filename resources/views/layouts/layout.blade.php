@@ -17,7 +17,7 @@
             <a href="{{ route('dashboard') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Dashboard</a>
             <a href="{{ route('colocation.index') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Colocations</a>
             <a href="{{ route('categories.index') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Catégories</a>
-            <a href="#" class="hover:bg-blue-500 hover:text-white p-2 rounded">Profil</a>
+            <a href="{{ route('profile.index')}}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Profil</a>
             <form action="{{ route('logout') }}" method="POST" class="mt-6">
                 @csrf
                 <button type="submit" class="bg-red-500 text-white w-full p-2 rounded hover:bg-red-600">Logout</button>

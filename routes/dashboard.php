@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColocationController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,5 +15,5 @@ use Illuminate\Support\Facades\Route;
     Route::resource('categories', CategoryController::class)->only(['index','store','destroy']);
     Route::resource('expenses', ExpenseController::class);
     Route::patch('/expenses/{expense}/markPaid',[ExpenseController::class, 'markPaid'])->name('expenses.markPaid');
-    // Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    // Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
