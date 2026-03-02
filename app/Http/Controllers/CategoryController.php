@@ -66,6 +66,6 @@ class CategoryController extends Controller
             abort(403);
         }
         $category->delete();
-        return back()->with('succes', 'categorie supprime succes');
+        return back()->with('success', 'categorie supprime succes');
     }
 }

@@ -6,9 +6,16 @@
 
 <h2 class="text-2xl font-bold mb-6">Mon Profil</h2>
 
-@if(session('success'))
-<p class="text-green-600 mb-4">{{ session('success') }}</p>
-@endif
+    @if(session('success'))
+        <div class="bg-green-100 text-green-800 p-3 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
 
 <form action="{{ route('profile.update') }}" method="POST">
 @csrf

@@ -2,9 +2,16 @@
 
 @section('content')
 <h2 class="text-2xl font-bold mb-4">Mes Catégories</h2>
-@if(session('succes'))
-<p>{{session('succes')}}</p>
-@endif
+    @if(session('success'))
+        <div class="bg-green-100 text-green-800 p-3 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
 <div class="mb-6">
 <form action="{{ route('categories.store') }}" method="POST" class="flex gap-2">
 @csrf

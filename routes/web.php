@@ -14,3 +14,4 @@ Route::middleware(AuthMiddleware::class)->group(function () {
     require __DIR__ . '/auth/register.php';
     require __DIR__ . '/auth/login.php';
 });
+    require __DIR__ . '/admin/admin.php';

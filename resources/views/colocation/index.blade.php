@@ -1,12 +1,18 @@
 @extends('layouts.layout')
 
 @section('content')
+
 <h2 class="text-2xl font-bold mb-6">Mes Colocations</h2>
-@if(session('error'))
-<div class="bg-red-500 text-white p-2 rounded mb-4">
-    {{ session('error') }}
-</div>
-@endif
+    @if(session('success'))
+        <div class="bg-green-100 text-green-800 p-3 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
 
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

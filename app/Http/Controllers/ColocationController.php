@@ -161,7 +161,7 @@ public function cancel(Colocation $colocation)
     }
 
     return redirect()->route('colocation.index')
-    ->with('success', 'Colocation mise a jour avec succes.');
+    ->with('success', 'Colocation mise a jour avec succes');
 }
     
 }

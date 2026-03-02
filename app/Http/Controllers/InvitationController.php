@@ -25,7 +25,7 @@ class InvitationController extends Controller
         ]);
 
         Mail::To($req['email'])->send(new InvitationMail($invitation));
-        return back()->with('succes', 'invitaion envoyee');
+        return back()->with('success', 'invitaion envoyee');
     }
     public function accept($token)
     {

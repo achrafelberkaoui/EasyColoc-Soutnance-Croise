@@ -14,7 +14,10 @@
         <h1 class="text-2xl font-bold mb-8">EasyColoc</h1>
         <h2 class="text-2xl font-bold mb-8">welcome {{auth()->user()->name}}</h2>
         <nav class="flex flex-col gap-3">
-            <a href="{{ route('dashboard') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Dashboard</a>
+            <a href="{{ route('dashboard') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Dashboard</a>  
+            @if(auth()->user()->is_admin)
+            <a href="{{ route('admin.dashboard') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Admin Dashboard</a>
+            @endif
             <a href="{{ route('colocation.index') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Colocations</a>
             <a href="{{ route('categories.index') }}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Catégories</a>
             <a href="{{ route('profile.index')}}" class="hover:bg-blue-500 hover:text-white p-2 rounded">Profil</a>

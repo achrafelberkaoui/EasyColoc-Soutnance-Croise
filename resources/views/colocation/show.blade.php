@@ -7,7 +7,16 @@
 <h2 class="text-2xl font-bold mb-6">{{ $colocation->name }}</h2>
 
 <div class="grid md:grid-cols-3 gap-6">
-    
+       @if(session('success'))
+        <div class="bg-green-100 text-green-800 p-3 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+            {{ session('error') }}
+        </div>
+    @endif 
     <!-- Filter -->
     <form method="GET" class="mb-4">
         <select name="month" class="border p-2 rounded">
